@@ -1,0 +1,23 @@
+{
+  "name": "lengbin/php-generator",
+  "description": "php php-generator",
+  "type": "library",
+  "keywords": ["php", "extension", "generator"],
+  "license": "MIT",
+  "require": {
+    "php": ">=7.2.0",
+    "lengbin/common": "@dev"
+  },
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "Lengbin\\PhpGenerator\\": "src"
+    }
+  },
+  "authors": [
+    {
+      "name": "lengbin",
+      "email": "xykxyk2008@163.com"
+    }
+  ]
+}
