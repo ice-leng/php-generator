@@ -3,13 +3,18 @@
 namespace Lengbin\PhpGenerator;
 
 use Lengbin\Common\Component\BaseObject;
+use Lengbin\PhpGenerator\Printer\PrinterFactory;
 
 /**
  * Class Base
  */
 class Base extends BaseObject
 {
-    use TraitGenerateClass;
+    /**
+     * @var int
+     */
+    protected $version = PrinterFactory::VERSION_PHP72;
+
     /**
      * @var bool
      */
@@ -39,6 +44,25 @@ class Base extends BaseObject
      * @var string
      */
     protected $name;
+
+    /**
+     * @return int
+     */
+    public function getVersion(): int
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param int $version
+     *
+     * @return Base
+     */
+    public function setVersion(int $version): Base
+    {
+        $this->version = $version;
+        return $this;
+    }
 
     /**
      * @return bool
@@ -72,7 +96,7 @@ class Base extends BaseObject
      *
      * @return Base
      */
-    public function setPrivate(bool $private): Base
+    public function setPrivate(bool $private = true): Base
     {
         $this->private = $private;
         if ($private === true) {
@@ -95,7 +119,7 @@ class Base extends BaseObject
      *
      * @return Base
      */
-    public function setProtected(bool $protected): Base
+    public function setProtected(bool $protected = true): Base
     {
         $this->protected = $protected;
         if ($protected === true) {
@@ -118,7 +142,7 @@ class Base extends BaseObject
      *
      * @return Base
      */
-    public function setPublic(bool $public): Base
+    public function setPublic(bool $public = true): Base
     {
         $this->public = $public;
         if ($public === true) {
@@ -175,33 +199,5 @@ class Base extends BaseObject
     {
         $this->comments[] = $comment;
         return $this;
-    }
-
-    /**
-     * 获取 作用域
-     *
-     * @param Base $base
-     *
-     * @return string
-     */
-    protected function getScope(Base $base): string
-    {
-        $str = '';
-        if ($base->getPublic()) {
-            $str = 'public';
-        }
-
-        if ($base->getProtected()) {
-            $str = 'protected';
-        }
-
-        if ($base->getPrivate()) {
-            $str = 'private';
-        }
-
-        if ($base->getStatic()) {
-            $str .= ' static';
-        }
-        return $str;
     }
 }

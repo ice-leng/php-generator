@@ -2,6 +2,8 @@
 
 namespace Lengbin\PhpGenerator;
 
+use Lengbin\PhpGenerator\Printer\PrinterFactory;
+
 class Method extends Base
 {
     /**
@@ -129,66 +131,14 @@ class Method extends Base
      *
      * @return Method
      */
-    public function setAbstract(bool $abstract): Method
+    public function setAbstract(bool $abstract = true): Method
     {
         $this->abstract = $abstract;
         return $this;
     }
 
-    protected function renderPrefix(): string
+    public function __toString(): string
     {
-        $str = '';
-        if ($this->getFinal()) {
-            $str .= "final ";
-        }
-        if ($this->getAbstract()) {
-            $str .= "abstract ";
-        }
-        return $str;
-    }
-
-    public function __toString()
-    {
-        $data = $params = [];
-        if (!empty($this->getParams())) {
-            foreach ($this->getParams() as $classParams) {
-                $classParamName = "$" . $classParams->getName();
-                if (empty($classParams->getType()) && !empty($classParams->getDefault())) {
-                    $classParams->setType($this->__valueType($classParams->getDefault()));
-                }
-                $classParam = '';
-                if (!empty($classParams->getType())) {
-                    $classParam .= "{$classParams->getType()} ";
-                } else {
-                    $classParams->setType("mixed");
-                }
-                $classParam .= $classParamName;
-                if ($classParams->getAssign()) {
-                    $classParam .= (" = " . $this->__getValue($classParams->getDefault()));
-                }
-                $params[] = $classParam;
-                $type = str_replace('?', 'null|', $classParams->getType());
-                $this->addComment("@param {$type} {$classParamName} {$classParams->getComment()}");
-            }
-        }
-        $param = implode(", ", $params);
-
-        $method = $this->getSpaces() . $this->renderPrefix() . $this->getScope($this) . " function {$this->getName()}({$param})";
-        if (!empty($this->getReturn())) {
-            $method .= ": {$this->getReturn()}";
-        } else {
-            $this->setReturn('mixed');
-        }
-        $this->addComment("@return {$this->getReturn()}");
-
-        $data[] = $this->renderComment($this->getComments(), 1);
-        $data[] = $method;
-        $data[] = "{$this->getSpaces()}{";
-        if (empty($this->getContent())) {
-            $this->setContent("{$this->getSpaces(2)}// TODO: Implement {$this->getName()}() method.");
-        }
-        $data[] = $this->getContent();
-        $data[] = "{$this->getSpaces()}}\n";
-        return implode("\n", array_filter($data));
+        return PrinterFactory::getInstance()->getPrinter($this->getVersion())->printMethod($this);
     }
 }

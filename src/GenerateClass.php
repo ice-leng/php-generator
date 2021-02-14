@@ -3,10 +3,20 @@
 namespace Lengbin\PhpGenerator;
 
 use Lengbin\Common\Component\BaseObject;
+use Lengbin\PhpGenerator\Printer\PrinterFactory;
 
 class GenerateClass extends BaseObject
 {
-    use TraitGenerateClass;
+    /**
+     * @var int
+     */
+    private $version = PrinterFactory::VERSION_PHP72;
+
+    /**
+     * @var bool
+     */
+    private $strictTypes = false;
+
     /**
      * @var bool
      */
@@ -66,6 +76,44 @@ class GenerateClass extends BaseObject
      * @var Property[]
      */
     private $properties = [];
+
+    /**
+     * @return int
+     */
+    public function getVersion(): int
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param int $version
+     *
+     * @return GenerateClass
+     */
+    public function setVersion(int $version): GenerateClass
+    {
+        $this->version = $version;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getStrictTypes(): bool
+    {
+        return $this->strictTypes;
+    }
+
+    /**
+     * @param bool $strictTypes
+     *
+     * @return GenerateClass
+     */
+    public function setStrictTypes(bool $strictTypes = true): GenerateClass
+    {
+        $this->strictTypes = $strictTypes;
+        return $this;
+    }
 
     /**
      * @return bool
@@ -361,85 +409,9 @@ class GenerateClass extends BaseObject
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    protected function renderNamespace(): string
-    {
-        return !empty($this->getNamespace()) ? "namespace {$this->getNamespace()};" : "";
-    }
-
-    /**
-     * @return string
-     */
-    protected function renderUses(): string
-    {
-        $data = [];
-        if (!empty($this->getUses())) {
-            foreach ($this->getUses() as $use) {
-                $data[] = "use {$use};";
-            }
-        }
-        return implode("\n", $data);
-    }
-
-    protected function renderPrefix(): string
-    {
-        $str = '';
-        if ($this->getFinal()) {
-            $str .= "final ";
-        }
-        if ($this->getAbstract()) {
-            $str .= "abstract ";
-        }
-        return $str;
-    }
-
-    /**
-     * @return string
-     */
-    protected function renderClassname(): string
-    {
-        $str = $this->renderPrefix() . ($this->getInterface() ? 'interface' : 'class') . " {$this->getClassname()}";
-
-        if (!empty($this->getInheritance())) {
-            $str .= " extends {$this->getInheritance()}";
-        }
-        if (!empty($this->getImplements())) {
-            $implement = implode(', ', $this->getImplements());
-            $str .= " implements {$implement}";
-        }
-        return $str;
-    }
-
     public function __toString(): string
     {
-        return implode("\n\n", array_filter([
-            // <?php
-            "<?php",
-            "declare(strict_types=1);",
-            // namespace
-            $this->renderNamespace(),
-            // uses
-            $this->renderUses(),
-            // class
-            implode("\n", array_filter([
-                // class comment
-                $this->renderComment($this->getComments()),
-                // classname
-                $this->renderClassname(),
-                // start
-                '{',
-                // const
-
-                // properties
-
-                // methods
-
-                // end
-                '}',
-            ])),
-        ]));
+        return PrinterFactory::getInstance()->getPrinter($this->getVersion())->printClass($this);
     }
 
 }

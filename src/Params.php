@@ -122,7 +122,7 @@ class Params extends BaseObject
      *
      * @return Params
      */
-    public function setAssign(bool $assign): Params
+    protected function setAssign(bool $assign): Params
     {
         $this->assign = $assign;
         return $this;

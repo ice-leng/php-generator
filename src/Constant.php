@@ -2,6 +2,8 @@
 
 namespace Lengbin\PhpGenerator;
 
+use Lengbin\PhpGenerator\Printer\PrinterFactory;
+
 class Constant extends Base
 {
     /**
@@ -28,17 +30,8 @@ class Constant extends Base
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        $data = [];
-        // if not comment, add name
-        if (empty($this->getComments())) {
-            $this->addComment($this->getName());
-        }
-        if (!empty($this->getComments())) {
-            $data[] = $this->renderComment($this->getComments(), 1);
-        }
-        $data[] = ("{$this->getSpaces()}{$this->getScope($this)} const " . strtoupper($this->getName()) . " = " . $this->__getValue($this->getDefault()) . ";\n");
-        return implode("\n", array_filter($data));
+        return PrinterFactory::getInstance()->getPrinter($this->getVersion())->printConstant($this);
     }
 }
