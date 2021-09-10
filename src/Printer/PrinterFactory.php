@@ -3,7 +3,7 @@
 namespace Lengbin\PhpGenerator\Printer;
 
 use Exception;
-use Lengbin\Common\Component\Singleton;
+use Lengbin\Common\Singleton;
 
 class PrinterFactory
 {
@@ -21,7 +21,6 @@ class PrinterFactory
                 break;
             default:
                 throw new Exception('Kind must be one of ::VERSION_PHP72, ::VERSION_PHP74 or ::VERSION_PHP80');
-                break;
         }
         return $printer;
     }

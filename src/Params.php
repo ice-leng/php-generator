@@ -2,7 +2,7 @@
 
 namespace Lengbin\PhpGenerator;
 
-use Lengbin\Common\Component\BaseObject;
+use Lengbin\Common\BaseObject;
 
 class Params extends BaseObject
 {

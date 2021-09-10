@@ -2,7 +2,7 @@
 
 namespace Lengbin\PhpGenerator;
 
-use Lengbin\Common\Component\BaseObject;
+use Lengbin\Common\BaseObject;
 use Lengbin\PhpGenerator\Printer\PrinterFactory;
 
 class GenerateClass extends BaseObject
