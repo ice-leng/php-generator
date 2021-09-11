@@ -200,4 +200,64 @@ class Base extends BaseObject
         $this->comments[] = $comment;
         return $this;
     }
+
+    /**
+     * @param $value
+     *
+     * @return string
+     */
+    public function __valueType($value): string
+    {
+        switch (gettype($value)) {
+            case 'boolean':
+                $value = 'bool';
+                break;
+            case 'integer':
+                $value = 'int';
+                break;
+            case 'double':
+                $value = 'float';
+                break;
+            case 'NULL':
+                $value = 'null';
+                break;
+            default:
+                break;
+        }
+        return $value;
+    }
+
+    /**
+     * @param $value
+     *
+     * @return string
+     */
+    public function __getValue($value): string
+    {
+        switch (gettype($value)) {
+            case 'boolean':
+                $value = $value ? 'true' : 'false';
+                break;
+            case 'integer':
+            case 'double':
+                $value = (string)$value;
+                break;
+            case 'string':
+                $value = "'" . $value . "'";
+                break;
+            case 'resource':
+                $value = '{resource}';
+                break;
+            case 'NULL':
+                $value = 'null';
+                break;
+            case 'unknown type':
+                $value = '{unknown}';
+                break;
+            case 'array':
+                $value = json_encode($value);
+                break;
+        }
+        return $value;
+    }
 }
