@@ -123,7 +123,7 @@ class PrinterPhp72 extends BasePrinter implements PrinterInterface
         foreach ($method->getParams() as $param) {
             $classParamName = "$" . $param->getName();
             if (empty($param->getType()) && !empty($param->getDefault())) {
-                $param->setType($param->__valueType($param->getDefault()));
+                $param->setType($method->__valueType($param->getDefault()));
             }
             $classParam = '';
             if (!empty($param->getType())) {
@@ -133,7 +133,7 @@ class PrinterPhp72 extends BasePrinter implements PrinterInterface
             }
             $classParam .= $classParamName;
             if ($param->getAssign()) {
-                $classParam .= (" = " . $param->__getValue($param->getDefault()));
+                $classParam .= (" = " . $method->__getValue($param->getDefault()));
             }
             $data[] = $classParam;
             $type = str_replace('?', 'null|', $param->getType());
