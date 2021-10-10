@@ -350,7 +350,9 @@ class GenerateClass extends BaseObject
      */
     public function addUse(string $use): GenerateClass
     {
-        $this->uses[] = $use;
+        if (!in_array($use, $this->uses)) {
+            $this->uses[] = $use;
+        }
         return $this;
     }
 
