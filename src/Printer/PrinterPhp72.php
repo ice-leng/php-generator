@@ -46,14 +46,15 @@ class PrinterPhp72 extends BasePrinter implements PrinterInterface
             $comments = [
                 'Class ' . $generateClass->getClassname(),
             ];
-            if (!empty($namespace)) {
-                $comments[] = '@package ' . $namespace;
+            if (!empty($generateClass->getNamespace())) {
+                $comments[] = '@package ' . $generateClass->getNamespace();
             }
             $generateClass->setComments($comments);
         }
 
         // class body
-        $body =  array_map(function ($result) {
+        $body =  array_map(function ($result) use ($generateClass) {
+            $result->setVersion($generateClass->getVersion());
             return $result->__toString();
         }, array_merge($generateClass->getConstants(), $generateClass->getProperties(), $generateClass->getMethods()));
 

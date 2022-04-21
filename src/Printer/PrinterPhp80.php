@@ -24,7 +24,6 @@ class PrinterPhp80 extends PrinterPhp72
     public function printProperty(Property $property): string
     {
         $data = [];
-        $property->setVersion(PrinterFactory::VERSION_PHP80);
         // if not comment, add default value type
         if (empty($property->getComments()) && !is_null($property->getDefault())) {
             $property->addComment("@var " . $property->__valueType($property->getDefault()));
