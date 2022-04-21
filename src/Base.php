@@ -46,6 +46,11 @@ class Base extends BaseObject
     protected $name;
 
     /**
+     * @var string|null
+     */
+    protected $type;
+
+    /**
      * @return int
      */
     public function getVersion(): int
@@ -202,6 +207,22 @@ class Base extends BaseObject
     }
 
     /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
      * @param $value
      *
      * @return string
@@ -234,7 +255,10 @@ class Base extends BaseObject
      */
     public function __getValue($value): string
     {
-        switch (gettype($value)) {
+        if (is_null($this->getType())) {
+            $this->setType(gettype($value));
+        }
+        switch ($this->getType()) {
             case 'boolean':
                 $value = $value ? 'true' : 'false';
                 break;

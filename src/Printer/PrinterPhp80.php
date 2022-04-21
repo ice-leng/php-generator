@@ -1,24 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lengbin\PhpGenerator\Printer;
 
-use Lengbin\PhpGenerator\Constant;
-use Lengbin\PhpGenerator\GenerateClass;
-use Lengbin\PhpGenerator\Method;
-use Lengbin\PhpGenerator\Params;
 use Lengbin\PhpGenerator\Property;
 
-class PrinterPhp74 extends PrinterPhp72
+class PrinterPhp80 extends PrinterPhp72
 {
+
+    protected function renderAnnotationComment(array $comments = []): string
+    {
+        $level = 1;
+        $data = [];
+        if (!empty($comments)) {
+            foreach ($comments as $comment) {
+                $data[] = "{$this->getSpaces($level)}{$comment}";
+            }
+        }
+        return implode("\n", $data);
+    }
+
     public function printProperty(Property $property): string
     {
         $data = [];
-        $property->setVersion(PrinterFactory::VERSION_PHP74);
+        $property->setVersion(PrinterFactory::VERSION_PHP80);
         // if not comment, add default value type
         if (empty($property->getComments()) && !is_null($property->getDefault())) {
             $property->addComment("@var " . $property->__valueType($property->getDefault()));
         }
-        $comment = $this->renderComment($property->getComments(), 1);
+        if ($property->isAnnotation()) {
+            $comment = $this->renderAnnotationComment($property->getComments());
+        } else {
+            $comment = $this->renderComment($property->getComments(), 1);
+        }
+
         $type = $property->getType();
         $data[] = $comment;
         $str = "{$this->getSpaces()}{$this->getScope($property)} {$type} $" . $property->getName();

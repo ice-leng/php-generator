@@ -22,6 +22,9 @@ class PrinterFactory
             case self::VERSION_PHP74:
                 $printer = new PrinterPhp74();
                 break;
+            case self::VERSION_PHP80:
+                $printer = new PrinterPhp80();
+                break;
             default:
                 throw new Exception('Kind must be one of ::VERSION_PHP72, ::VERSION_PHP74 or ::VERSION_PHP80');
         }

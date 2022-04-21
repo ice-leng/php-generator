@@ -12,6 +12,11 @@ class Property extends Base
     private $default;
 
     /**
+     * @var bool
+     */
+    private $annotation;
+
+    /**
      * @return mixed
      */
     public function getDefault()
@@ -28,6 +33,22 @@ class Property extends Base
     {
         $this->default = $default;
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAnnotation(): bool
+    {
+        return $this->annotation;
+    }
+
+    /**
+     * @param bool $annotation
+     */
+    public function setAnnotation(bool $annotation): void
+    {
+        $this->annotation = $annotation;
     }
 
     public function __toString(): string
