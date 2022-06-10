@@ -58,11 +58,20 @@ class PrinterPhp72 extends BasePrinter implements PrinterInterface
             return $result->__toString();
         }, array_merge($generateClass->getConstants(), $generateClass->getProperties(), $generateClass->getMethods()));
 
+        // traits
+        $traits = [];
+        if (!empty($generateClass->getTraits())) {
+            foreach ($generateClass->getTraits() as $trait) {
+                $traits[] = "use {$trait};";
+            }
+        }
+
         // class
         $class = array_merge([
             $this->renderComment($generateClass->getComments()),
             $this->renderClassname($generateClass),
             '{',
+            implode("\n", $traits),
         ], $body, ['}']);
 
         return implode("\n\n", array_filter([

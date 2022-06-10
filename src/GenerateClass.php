@@ -78,6 +78,11 @@ class GenerateClass extends BaseObject
     private $properties = [];
 
     /**
+     * @var array
+     */
+    private $traits = [];
+
+    /**
      * @return int
      */
     public function getVersion(): int
@@ -408,6 +413,34 @@ class GenerateClass extends BaseObject
     public function addMethod(Method $method): GenerateClass
     {
         $this->methods[] = $method;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTraits(): array
+    {
+        return $this->traits;
+    }
+
+    /**
+     * @param array $traits
+     * @return GenerateClass
+     */
+    public function setTraits(array $traits): GenerateClass
+    {
+        $this->traits = $traits;
+        return $this;
+    }
+
+    /**
+     * @param string $trait
+     * @return $this
+     */
+    public function addTrait(string $trait): GenerateClass
+    {
+        $this->traits[] = $trait;
         return $this;
     }
 
