@@ -64,6 +64,7 @@ class PrinterPhp72 extends BasePrinter implements PrinterInterface
             foreach ($generateClass->getTraits() as $trait) {
                 $traits[] = $this->getSpaces() . "use {$trait};";
             }
+            $traits[] = '';
         }
 
         // class
@@ -72,7 +73,6 @@ class PrinterPhp72 extends BasePrinter implements PrinterInterface
             $this->renderClassname($generateClass),
             '{',
             implode("\n", $traits),
-            '',
         ], $body, ['}']);
 
         return implode("\n\n", array_filter([
